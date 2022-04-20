@@ -25,7 +25,8 @@ service_map = {
     120701: 'Personalausweis beantragen',
     121151: 'Reisepass beantragen',
     121921: 'Gewerbeanmeldung',
-    327537: 'Fahrerlaubnis - Umschreibung einer ausländischen'
+    327537: 'Fahrerlaubnis - Umschreibung einer ausländischen',
+    120926: 'Führungszeugnis beantragen'
 }
 
 @dataclass
@@ -38,9 +39,9 @@ class Message:
 class User:
   chat_id: int
   services: List[int]
-  def __init__(self, chat_id, services=[120686]):
+  def __init__(self, chat_id, services=[120926]):
     self.chat_id = chat_id
-    self.services = services if len(services) > 0 else [120686]
+    self.services = services if len(services) > 0 else [120926]
 
 
   def marshall_user(self) -> str:
@@ -127,6 +128,7 @@ class Bot:
       service_id = int(update.message.text.split(' ')[1])
       for u in self.users:
         if u.chat_id == update.message.chat_id:
+          self.parser.add_service(int(service_id))
           u.services.append(int(service_id))
           self.__persist_chats()
           break
